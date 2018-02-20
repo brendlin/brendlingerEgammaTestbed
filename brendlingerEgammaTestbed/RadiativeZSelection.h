@@ -31,6 +31,8 @@ public:
   virtual EL::StatusCode createOutput();
   virtual EL::StatusCode execute();
 
+  void AssignZbosonIndices(xAOD::MuonContainer& muons,int& SFOS_lep1i,int& SFOS_lep2i);
+  bool HighestPtCandidateIsElectron(xAOD::PhotonContainer& photons, xAOD::ElectronContainer& elecs);
 
   // this is needed to distribute the algorithm to the workers
   ClassDef(RadiativeZSelection, 1);
