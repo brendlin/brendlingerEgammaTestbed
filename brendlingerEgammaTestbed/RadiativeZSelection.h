@@ -34,6 +34,12 @@ public:
   void AssignZbosonIndices(xAOD::MuonContainer& muons,int& SFOS_lep1i,int& SFOS_lep2i);
   bool HighestPtCandidateIsElectron(xAOD::PhotonContainer& photons, xAOD::ElectronContainer& elecs);
 
+  bool IsTruePhoton(xAOD::Electron elec);
+  bool IsTruePhoton(xAOD::Photon photon);
+
+  void PrintTruthInformation(xAOD::Photon& photon);
+  void PrintTruthInformation(xAOD::Electron& elec);
+
   // this is needed to distribute the algorithm to the workers
   ClassDef(RadiativeZSelection, 1);
 };
