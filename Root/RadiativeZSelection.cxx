@@ -94,8 +94,8 @@ EL::StatusCode RadiativeZSelection::execute()
     candidate_tlv = photons[0]->p4();
   }
 
-  if (candidate_in_electron_container) PrintTruthInformation(*elecs[0]);
-  else PrintTruthInformation(*photons[0]);
+  //if (candidate_in_electron_container) PrintTruthInformation(*elecs[0]);
+  //else PrintTruthInformation(*photons[0]);
 
   // std::cout << Zboson.M() << std::endl;
   histoStore()->fillTH1F("m_llegamma", Zboson_withPhoton.M()/HG::GeV);
