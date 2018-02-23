@@ -1,6 +1,7 @@
 #include "brendlingerEgammaTestbed/RadiativeZSelection.h"
 #include "HGamAnalysisFramework/HgammaIncludes.h"
 #include "HGamAnalysisFramework/HGamVariables.h"
+#include "HGamAnalysisFramework/TruthUtils.h"
 
 #include "xAODTruth/xAODTruthHelpers.h"
 
@@ -146,11 +147,13 @@ bool RadiativeZSelection::IsTruePhoton(xAOD::Electron elec) {
 
   // Sherpa Z->eegamma
   if (truth_type == 4  && truth_origin == 3) return true;
+  if (truth_type == 14 && truth_origin == 3) return true;
   if (firstEgMotherTruthType == 14 && firstEgMotherTruthOrigin == 3) return true;
 
   // PowhegPythia Z->ee(gamma)
   if (truth_type == 4 && truth_origin == 5 &&
       firstEgMotherTruthType == 15 && firstEgMotherTruthOrigin == 40) return true;
+  if (truth_type == 15 && truth_origin == 40) return true;
 
   return false;
 }
@@ -164,6 +167,7 @@ bool RadiativeZSelection::IsTruePhoton(xAOD::Photon photon) {
   if (truth_type == 14 && truth_origin == 3) return true;
   // PowhegPythia Z->ee(gamma)
   if (truth_type == 15 && truth_origin == 40) return true;
+  if (truth_type == 16 && truth_origin == 38) return true;
 
   return false;
 }
@@ -186,13 +190,17 @@ void RadiativeZSelection::PrintTruthInformation(xAOD::Photon& photon) {
   const xAOD::TruthParticle* eg_candidate_truth = xAOD::TruthHelpers::getTruthParticle(photon);
   int mc_ph_mother_pdgId = -99999;
   int pdgid = -99999;
+  int isGood = -1;
   if (eg_candidate_truth) {
     pdgid = eg_candidate_truth->pdgId();
+    isGood = HG::isGoodTruthPhoton(eg_candidate_truth) ? 1 : 0;
     if (eg_candidate_truth->nParents() > 0) {
       const xAOD::TruthParticle* photon_parent = eg_candidate_truth->parent( 0 );
       mc_ph_mother_pdgId = photon_parent->pdgId();
     }
   }
+
+  //if (isGood == (IsTruePhoton(photon) ? 1 : 0)) return;
 
   std::cout << "Candidate: "
             << " photon "
@@ -207,6 +215,7 @@ void RadiativeZSelection::PrintTruthInformation(xAOD::Photon& photon) {
             << " lastEgMotherTT: " << lastEgMotherTruthType
             << " lastEgMotherTO: " << lastEgMotherTruthOrigin
             << " Result: " << IsTruePhoton(photon)
+            << " HG: " << isGood
             << std::endl;
 
   return;
@@ -230,13 +239,17 @@ void RadiativeZSelection::PrintTruthInformation(xAOD::Electron& elec) {
   const xAOD::TruthParticle* eg_candidate_truth = xAOD::TruthHelpers::getTruthParticle(elec);
   int mc_ph_mother_pdgId = -99999;
   int pdgid = -99999;
+  int isGood = -1;
   if (eg_candidate_truth) {
     pdgid = eg_candidate_truth->pdgId();
+    isGood = HG::isGoodTruthPhoton(eg_candidate_truth) ? 1 : 0;
     if (eg_candidate_truth->nParents() > 0) {
       const xAOD::TruthParticle* photon_parent = eg_candidate_truth->parent( 0 );
       mc_ph_mother_pdgId = photon_parent->pdgId();
     }
   }
+
+  //if (isGood == (IsTruePhoton(elec) ? 1 : 0)) return;
 
   std::cout << "Candidate: "
             << " electron "
@@ -251,6 +264,7 @@ void RadiativeZSelection::PrintTruthInformation(xAOD::Electron& elec) {
             << " lastEgMotherTT: " << lastEgMotherTruthType
             << " lastEgMotherTO: " << lastEgMotherTruthOrigin
             << " Result: " << IsTruePhoton(elec)
+            << " HG: " << isGood
             << std::endl;
 
   return;
